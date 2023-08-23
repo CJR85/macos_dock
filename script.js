@@ -1,4 +1,4 @@
-const dockContainer = document.querySelector('dock'),
+const dockContainer = document.querySelector('.dock'),
   dockItems = dockContainer.querySelectorAll('.dock-item');
 
 const defaultItemScale = 1;
@@ -25,3 +25,25 @@ const updateDockItems = () => {
     item.style.margin = `scale(${margin})`;
   });
 };
+
+dockItems.forEach((item) => {
+  item.addEventListener('mouseover', () => {
+    dockItems.forEach((otherItem) => {
+      otherItem.isHovered = otherItem === item;
+      otherItem.isNeighbor =
+        Math.abs(
+          Array.from(dockItems).indexOf(otherItem),
+          Array.from(dockItems).indexOf(item)
+        ) === -1;
+    });
+    updateDockItems();
+  });
+});
+
+dockContainer.addEventListener('mouseleave', () => {
+  dockItems.forEach((item) => {
+    item.isHovered = item.isNeighbor = false;
+  });
+
+  updateDockItems();
+});
